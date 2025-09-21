@@ -3,7 +3,7 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate
-from app.core.security import get_password_hash
+from app.core.security import get_password_hash, verify_password
 
 def get_user_by_email(db: Session, email: str) -> User | None:
     """
@@ -32,3 +32,19 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def authenticate_user(db: Session, email: str, password: str) -> User | None:
+    """
+    Autentica a un usuario.
+    
+    :param db: La sesión de la base de datos.
+    :param email: El email del usuario.
+    :param password: La contraseña en texto plano.
+    :return: El objeto User si la autenticación es exitosa, de lo contrario None.
+    """
+    user = get_user_by_email(db, email=email)
+    if not user:
+        return None
+    if not verify_password(password, user.hashed_password):
+        return None
+    return user    
