@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 
 from app.core.config import settings
+from cryptography.fernet import Fernet
 
 # Configuración de Passlib para el hashing de contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -31,3 +32,23 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
+
+# ENCRYPTION_KEY = settings.SECRET_KEY[:32].encode('utf-8').ljust(32, b'\0')
+# Usamos una parte de la SECRET_KEY para simplificar, pero en producción deberían ser claves separadas.
+# Fernet requiere una clave de 32 bytes.
+
+_cipher_suite = Fernet(settings.ENCRYPTION_KEY.encode('utf-8'))
+
+def encrypt_data(data: str) -> str:
+    """Cifra un string y lo devuelve como string."""
+    if not data:
+        return data
+    encrypted_bytes = _cipher_suite.encrypt(data.encode('utf-8'))
+    return encrypted_bytes.decode('utf-8')
+
+def decrypt_data(encrypted_data: str) -> str:
+    """Descifra un string y lo devuelve como string."""
+    if not encrypted_data:
+        return encrypted_data
+    decrypted_bytes = _cipher_suite.decrypt(encrypted_data.encode('utf-8'))
+    return decrypted_bytes.decode('utf-8')    

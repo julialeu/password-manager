@@ -13,5 +13,5 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
 
-    # Relación con las contraseñas (VaultItem) que añadiremos más tarde
-    # vault_items = relationship("VaultItem", back_populates="owner")
+    # Relación con las contraseñas (VaultItem)
+    vault_items = relationship("VaultItem", back_populates="owner", cascade="all, delete-orphan")
