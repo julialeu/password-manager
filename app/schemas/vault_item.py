@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, ConfigDict
 
 class VaultItemBase(BaseModel):
     username: str | None = None
@@ -16,8 +16,7 @@ class VaultItemInDBBase(VaultItemBase):
     id: int
     owner_id: int
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Schema para devolver al cliente (sin la contraseña cifrada)
 class VaultItem(VaultItemInDBBase):
