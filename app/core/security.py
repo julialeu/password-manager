@@ -51,4 +51,30 @@ def decrypt_data(encrypted_data: str) -> str:
     if not encrypted_data:
         return encrypted_data
     decrypted_bytes = _cipher_suite.decrypt(encrypted_data.encode('utf-8'))
-    return decrypted_bytes.decode('utf-8')    
+    return decrypted_bytes.decode('utf-8')
+
+# --- Funciones para Reseteo de Contraseña ---
+
+def create_password_reset_token(email: str) -> str:
+    """Crea un token JWT para el reseteo de contraseña."""
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES  # Reutilizamos el tiempo de expiración
+    )
+    to_encode = {
+        "exp": expire,
+        "sub": email,
+        "scope": "password_reset"  # Un 'scope' para diferenciarlo de un token de acceso
+    }
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    return encoded_jwt
+
+def verify_password_reset_token(token: str) -> str | None:
+    """Verifica el token de reseteo de contraseña y devuelve el email."""
+    try:
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        # Asegurarnos de que el token es para reseteo de contraseña
+        if decoded_token.get("scope") == "password_reset":
+            return decoded_token.get("sub")
+        return None
+    except JWTError:
+        return None     
