@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.api import deps
 from app.schemas.user import User, UserCreate
 from app.crud import crud_user
+from app.models.user import User as UserModel
 
 router = APIRouter()
 
@@ -27,3 +28,12 @@ def create_user(
     
     user = crud_user.create_user(db=db, user=user_in)
     return user
+
+@router.get("/me", response_model=User)
+def read_users_me(
+    current_user: UserModel = Depends(deps.get_current_user)
+):
+    """
+    Obtiene los datos del usuario actual.
+    """
+    return current_user    
