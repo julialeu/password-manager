@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Entorno virtual
+.venv
+venv/
+env/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Bases de datos locales
+*.db
+*.db-journal
+
+# IDE configuration
+.vscode/
+.idea/
+
+# File env
+.env
+
+# Dev dependencies
+requirements-dev.txt
