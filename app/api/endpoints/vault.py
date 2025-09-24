@@ -73,18 +73,18 @@ def read_vault_item(
 @router.put("/{item_id}", response_model=VaultItem)
 def update_vault_item(
     item_id: int,
-    *,
+    item_in: VaultItemUpdate,
     db: Session = Depends(deps.get_db),
-    current_user: UserModel = Depends(deps.get_current_user),
-    item_in: VaultItemUpdate
+    current_user: UserModel = Depends(deps.get_current_user)
 ):
     """
     Actualiza un item de la bóveda.
     """
+    
     db_item = crud_vault_item.get_vault_item(db, item_id=item_id, owner_id=current_user.id)
     if not db_item:
         raise HTTPException(status_code=404, detail="Vault item not found")
-
+    
     item = crud_vault_item.update_vault_item(db=db, db_item=db_item, item_in=item_in)
     return item
 

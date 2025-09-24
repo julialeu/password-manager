@@ -1,0 +1,8 @@
+.login-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #f3f4f6; }
+.login-box { width: 100%; max-width: 400px; padding: 2rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+.login-box h2 { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 1.5rem; }
+.input-group { margin-bottom: 1rem; }
+.input-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+.input-group input { width: 100%; }
+.error-message { color: #ef4444; font-size: 0.875rem; text-align: center; }
+.login-box button { width: 100%; }
