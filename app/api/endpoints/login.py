@@ -40,21 +40,18 @@ def login_for_access_token(
 @router.post("/password-recovery/{email}", status_code=status.HTTP_200_OK)
 def recover_password(email: str, db: Session = Depends(deps.get_db)):
     """
-    Inicia el flujo de recuperación de contraseña.
+    Start the password recovery process.
     """
     user = crud_user.get_user_by_email(db, email=email)
 
     if not user:
         # No revelamos si el usuario existe o no por seguridad.
-        # Simplemente actuamos como si el proceso hubiera funcionado.
+        # Simplemente actuamos como si el proceso hubiera funcionado con normalidad.
         print(f"Password recovery requested for non-existent user: {email}")
         return {"msg": "If a user with that email exists, a password recovery link has been sent."}
 
     password_reset_token = create_password_reset_token(email=email)
     
-    # --- Simulación de envío de email ---
-    # En una aplicación real, aquí enviarías el token por email al usuario.
-    # Para esta prueba, lo imprimiremos en la consola.
     print("--- PASSWORD RESET TOKEN (SIMULATED EMAIL) ---")
     print(f"User: {user.email}")
     print(f"Token: {password_reset_token}")
@@ -69,7 +66,7 @@ def reset_password(
     reset_data: PasswordReset
 ):
     """
-    Resetea la contraseña usando un token válido.
+    Reset the password using a valid token.
     """
     email = verify_password_reset_token(token=reset_data.token)
     if not email:

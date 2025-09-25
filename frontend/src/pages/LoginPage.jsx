@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'; // Importa useState y useEffect
-import { useNavigate, Link } from 'react-router-dom'; // Importa useNavigate y Link
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import apiClient from '../services/api.js';
 import './LoginPage.css';
 
@@ -8,10 +8,10 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // Estado para el mensaje de éxito
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
-  // --- EFECTO PARA LEER EL MENSAJE DE ÉXITO ---
+  // --- MENSAJE DE ÉXITO ---
   useEffect(() => {
     // Leemos el mensaje de sessionStorage cuando el componente se carga
     const msg = sessionStorage.getItem('successMessage');
@@ -20,13 +20,13 @@ function LoginPage() {
       // Lo borramos para que no se vuelva a mostrar
       sessionStorage.removeItem('successMessage');
     }
-  }, []); // El array vacío [] asegura que esto solo se ejecute una vez al cargar
+  }, []);
 
-  // --- FUNCIÓN DE LOGIN ---
+  // --- LOGIN ---
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-    setSuccessMessage(''); // Limpiamos el mensaje de éxito al intentar loguear
+    setSuccessMessage(''); // Limpiamos el mensaje de éxito al intentar hacer login
     try {
       const formData = new URLSearchParams();
       formData.append('username', email);
@@ -40,23 +40,21 @@ function LoginPage() {
       
       if (token) {
         localStorage.setItem('token', token);
-        navigate('/'); // Redirigir a la bóveda si el login es exitoso
+        navigate('/'); // Redirigir a vault si el login es exitoso
       } else {
-        throw new Error("La respuesta del servidor no contiene un token.");
+        throw new Error("The server response does not contain a token.");
       }
     } catch (err) {
-      console.error("Error en el login:", err);
-      setError('Email o contraseña incorrectos.');
+      console.error("Login error:", err);
+      setError('Incorrect email or password.');
     }
   };
 
-  // --- JSX (LO QUE SE RENDERIZA) ---
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Iniciar Sesión</h2>
+        <h2>My Password Manager</h2>
 
-        {/* Muestra el mensaje de éxito si existe */}
         {successMessage && (
           <p style={{color: 'green', textAlign: 'center', marginBottom: '1rem'}}>
             {successMessage}
@@ -69,16 +67,18 @@ function LoginPage() {
             <input
               id="email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div className="input-group">
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -89,7 +89,7 @@ function LoginPage() {
         </form>
 
         <p style={{ textAlign: 'center', marginTop: '1rem' }}>
-          ¿No tienes una cuenta? <Link to="/register">Regístrate aquí</Link>
+          Don't have an account? <Link to="/register">Register here</Link>
         </p>
       </div>
     </div>

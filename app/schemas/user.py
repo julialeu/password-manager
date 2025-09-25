@@ -1,10 +1,5 @@
-# app/schemas/user.py
-
 from pydantic import BaseModel, EmailStr, ConfigDict
 
-# --- User Schemas ---
-
-# Propiedades compartidas que tienen todos los schemas del usuario
 class UserBase(BaseModel):
     email: EmailStr
 

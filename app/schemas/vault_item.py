@@ -18,10 +18,9 @@ class VaultItemInDBBase(VaultItemBase):
     
     model_config = ConfigDict(from_attributes=True)
 
-# Schema para devolver al cliente (sin la contraseña cifrada)
 class VaultItem(VaultItemInDBBase):
     pass
 
-# Schema que puede incluir la contraseña descifrada (para la vista de detalle)
+# Schema que puede incluir la contraseña descifrada (para el modal con el detalle)
 class VaultItemWithPassword(VaultItem):
     password: str

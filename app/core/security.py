@@ -5,49 +5,44 @@ from jose import JWTError, jwt
 from app.core.config import settings
 from cryptography.fernet import Fernet
 
-# Configuración de Passlib para el hashing de contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# --- Hashing de Contraseñas ---
+# --- Hashing de Passwords ---
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verifica si una contraseña en texto plano coincide con una hasheada."""
+    """Verify whether a plaintext password matches a hashed one."""
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password: str) -> str:
-    """Genera el hash de una contraseña."""
+    """Generates the hash of a password."""
     return pwd_context.hash(password)
 
 # --- Creación y Verificación de Tokens JWT ---
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
-    """Crea un nuevo token de acceso JWT."""
+    """Create a new JWT access token."""
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        # Por defecto, el token expira en 15 minutos si no se especifica
+        # Por defecto, el token expira en 15 minutos
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
-# ENCRYPTION_KEY = settings.SECRET_KEY[:32].encode('utf-8').ljust(32, b'\0')
-# Usamos una parte de la SECRET_KEY para simplificar, pero en producción deberían ser claves separadas.
-# Fernet requiere una clave de 32 bytes.
-
 _cipher_suite = Fernet(settings.ENCRYPTION_KEY.encode('utf-8'))
 
 def encrypt_data(data: str) -> str:
-    """Cifra un string y lo devuelve como string."""
+    """Encodes a string and returns it as a string."""
     if not data:
         return data
     encrypted_bytes = _cipher_suite.encrypt(data.encode('utf-8'))
     return encrypted_bytes.decode('utf-8')
 
 def decrypt_data(encrypted_data: str) -> str:
-    """Descifra un string y lo devuelve como string."""
+    """Decrypts a string and returns it as a string."""
     if not encrypted_data:
         return encrypted_data
     decrypted_bytes = _cipher_suite.decrypt(encrypted_data.encode('utf-8'))
@@ -56,20 +51,20 @@ def decrypt_data(encrypted_data: str) -> str:
 # --- Funciones para Reseteo de Contraseña ---
 
 def create_password_reset_token(email: str) -> str:
-    """Crea un token JWT para el reseteo de contraseña."""
+    """Create a JWT token for password reset."""
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES  # Reutilizamos el tiempo de expiración
     )
     to_encode = {
         "exp": expire,
         "sub": email,
-        "scope": "password_reset"  # Un 'scope' para diferenciarlo de un token de acceso
+        "scope": "password_reset"  
     }
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 def verify_password_reset_token(token: str) -> str | None:
-    """Verifica el token de reseteo de contraseña y devuelve el email."""
+    """Verify the password reset token and return the email."""
     try:
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         # Asegurarnos de que el token es para reseteo de contraseña

@@ -12,7 +12,7 @@ from app.main import app
 from app.api import deps
 from app.db.base_class import Base
 
-# --- CONFIGURACIÓN DE BASE DE DATOS DE PRUEBA (SÍNCRONA Y ESTABLE) ---
+# --- DB de prueba
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 engine = create_engine(
@@ -36,7 +36,7 @@ app.dependency_overrides[deps.get_db] = override_get_db
 
 @pytest.fixture(scope="session")
 def event_loop():
-    """Crea un bucle de eventos para toda la sesión de tests."""
+    """Create an event loop for the entire test session."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
@@ -45,9 +45,8 @@ def event_loop():
 @pytest.fixture(scope="function", autouse=True)
 def db_setup_and_teardown():
     """
-
-    Crea las tablas antes de cada test y las borra después.
-    El alcance 'function' asegura un estado limpio para cada test.
+    Create the tables before each test and delete them afterwards.
+    The ‘function’ scope ensures a clean state for each test.
     """
     Base.metadata.create_all(bind=engine)
     yield
@@ -57,7 +56,7 @@ def db_setup_and_teardown():
 @pytest.fixture(scope="session")
 async def client() -> AsyncGenerator[AsyncClient, None]:
     """
-    Cliente HTTP no autenticado.
+    Unauthenticated HTTP client.
     """
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as c:
@@ -67,7 +66,7 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 @pytest.fixture(scope="function")
 async def authenticated_client(client: AsyncClient) -> AsyncClient:
     """
-    Cliente HTTP autenticado. Alcance de función para asegurar el aislamiento.
+    Authenticated HTTP client. Function scope to ensure isolation.
     """
     user_credentials = {"email": f"testauth-{id(client)}@example.com", "password": "testpassword"}
     await client.post("/users/", json=user_credentials)

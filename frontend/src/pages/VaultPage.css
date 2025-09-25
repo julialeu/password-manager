@@ -1,32 +1,30 @@
-/* frontend/src/pages/VaultPage.css */
 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: white; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); }
 .navbar h1 { font-size: 1.25rem; font-weight: bold; }
-.navbar button { /* Estilo btn-danger ya en index.css */ }
+.navbar button 
 .main-content { padding: 2rem; max-width: 1200px; margin: 0 auto; }
 .toolbar {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
   gap: 1rem;
-  flex-wrap: wrap; /* Para que los elementos se ajusten en pantallas pequeñas */
+  flex-wrap: wrap;
 }
 .search-input {
   flex-grow: 1;
   padding: 0.5rem 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  min-width: 200px; /* Asegura que el input no sea demasiado pequeño */
+  min-width: 200px;
 }
 .add-btn {
-  /* Estilo btn-primary ya en index.css */
-  white-space: nowrap; /* Evita que el texto del botón se rompa */
+  white-space: nowrap;
 }
 .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
 .item-card { background-color: white; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); display: flex; flex-direction: column; justify-content: space-between; }
 .item-card h3 { font-weight: bold; word-break: break-all; margin-bottom: 0.5rem; }
 .item-card p { color: #4b5563; margin-bottom: 1rem; }
 .card-actions { margin-top: auto; text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end; }
-.card-actions button { /* Estilos btn-primary, btn-danger ya en index.css */
+.card-actions button { 
   padding: 0.25rem 0.75rem;
   font-size: 0.875rem;
 }

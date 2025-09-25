@@ -1,5 +1,3 @@
-# app/crud/crud_user.py
-
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate
@@ -7,21 +5,21 @@ from app.core.security import get_password_hash, verify_password
 
 def get_user_by_email(db: Session, email: str) -> User | None:
     """
-    Busca un usuario por su dirección de email.
+    Search for a user by their email address.
     
-    :param db: La sesión de la base de datos.
-    :param email: El email del usuario a buscar.
-    :return: El objeto User si se encuentra, de lo contrario None.
+    :param db: The database session.
+    :param email: The email address of the user to search for.
+    :return: The User object if found, otherwise None..
     """
     return db.query(User).filter(User.email == email).first()
 
 def create_user(db: Session, user: UserCreate) -> User:
     """
-    Crea un nuevo usuario en la base de datos.
+    Creates a new user in the database.
     
-    :param db: La sesión de la base de datos.
-    :param user: Los datos del usuario a crear (schema UserCreate).
-    :return: El objeto User recién creado.
+    :param db: The database session.
+    :param user: The data for the user to be created (UserCreate schema).
+    :return: The newly created User object.
     """
     hashed_password = get_password_hash(user.password)
     db_user = User(
@@ -35,12 +33,12 @@ def create_user(db: Session, user: UserCreate) -> User:
 
 def authenticate_user(db: Session, email: str, password: str) -> User | None:
     """
-    Autentica a un usuario.
+     Authenticate a user.
     
-    :param db: La sesión de la base de datos.
-    :param email: El email del usuario.
-    :param password: La contraseña en texto plano.
-    :return: El objeto User si la autenticación es exitosa, de lo contrario None.
+    :param db: The database session.
+    :param email: The user's email address.
+    :param password: The password in plain text.
+    :return: The User object if authentication is successful, otherwise None.
     """
     user = get_user_by_email(db, email=email)
     if not user:

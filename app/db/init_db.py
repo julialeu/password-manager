@@ -1,7 +1,6 @@
 # app/db/init_db.py
 
 from app.db.session import engine
-# Importamos Base y los modelos para que SQLAlchemy los conozca
 from app.db.base_class import Base
 from app.models.user import User
 from app.models.vault_item import VaultItem

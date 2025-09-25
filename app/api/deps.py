@@ -13,8 +13,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login/token")
 
 def get_db() -> Generator:
     """
-    Dependencia de FastAPI para obtener una sesión de base de datos.
-    Asegura que la sesión se cierre después de cada petición.
+    FastAPI dependency for obtaining a database session.
+    Ensures that the session is closed after each request.
     """
     try:
         db = SessionLocal()
@@ -26,7 +26,7 @@ def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ):
     """
-    Dependencia para obtener el usuario actual a partir del token JWT.
+    Functionality to obtain the current user from the JWT token.
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

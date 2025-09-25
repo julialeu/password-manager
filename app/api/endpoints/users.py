@@ -1,5 +1,3 @@
-# app/api/endpoints/users.py
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -17,7 +15,7 @@ def create_user(
     user_in: UserCreate
 ):
     """
-    Crea un nuevo usuario en el sistema.
+    Create a new user in the system.
     """
     user = crud_user.get_user_by_email(db, email=user_in.email)
     if user:
@@ -34,6 +32,6 @@ def read_users_me(
     current_user: UserModel = Depends(deps.get_current_user)
 ):
     """
-    Obtiene los datos del usuario actual.
+    Obtain the current user data.
     """
     return current_user    
