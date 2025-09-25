@@ -4,7 +4,6 @@ import apiClient from '../services/api.js';
 import './LoginPage.css';
 
 function LoginPage() {
-  // --- ESTADOS DEL COMPONENTE ---
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -40,7 +39,7 @@ function LoginPage() {
       
       if (token) {
         localStorage.setItem('token', token);
-        navigate('/'); // Redirigir a vault si el login es exitoso
+        navigate('/');
       } else {
         throw new Error("The server response does not contain a token.");
       }
@@ -87,10 +86,10 @@ function LoginPage() {
           {error && <p className="error-message">{error}</p>}
           <button type="submit" className="btn-primary">Login</button>
         </form>
-
-        <p style={{ textAlign: 'center', marginTop: '1rem' }}>
-          Don't have an account? <Link to="/register">Register here</Link>
-        </p>
+         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '1rem', fontSize: '0.9rem'}}>
+          <Link to="/request-password-reset">Forgot your password?</Link>
+          <Link to="/register">Create Account</Link>
+        </div>
       </div>
     </div>
   );
