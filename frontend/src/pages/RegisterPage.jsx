@@ -9,19 +9,25 @@ function RegisterPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+
+   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      await apiClient.post('/users/', { email, password });
+      // La respuesta contiene el token
+      const response = await apiClient.post('/users/', { email, password });
       
-      // Opcional: Se podría iniciar sesión automáticamente después del registro
-      // para simplificar,vredirigimos al login
-      // con un mensaje de éxito.
-      sessionStorage.setItem('successMessage', 'Registration successful! You can now log in.');
-    
-      // Redirigimos
-      navigate('/login');
+      const token = response.data?.access_token;
+      
+      if (token) {
+        // Si recibimos un token, lo guardamos y vamos al vault
+        localStorage.setItem('token', token);
+        navigate('/');
+      } else {
+        // Si por alguna razón no llega el token, vamos al login
+        sessionStorage.setItem('successMessage', 'Registration successful! You can now log in.');
+        navigate('/login');
+      }
 
     } catch (err) {
       if (err.response && err.response.data.detail) {
@@ -31,11 +37,11 @@ function RegisterPage() {
       }
     }
   };
-
+  
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Create Account</h2>
+        <h2>My Password Manager</h2>
         <form onSubmit={handleRegister}>
           <div className="input-group">
             <label htmlFor="email">Email</label>
