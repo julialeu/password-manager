@@ -17,7 +17,7 @@ def get_password_hash(password: str) -> str:
     """Generates the hash of a password."""
     return pwd_context.hash(password)
 
-# --- Creación y Verificación de Tokens JWT ---
+# --- Creación y verificación de tokens ---
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     """Create a new JWT access token."""
@@ -25,7 +25,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        # Por defecto, el token expira en 15 minutos
+        # El token expira en 15 minutos
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     
     to_encode.update({"exp": expire})
@@ -53,7 +53,7 @@ def decrypt_data(encrypted_data: str) -> str:
 def create_password_reset_token(email: str) -> str:
     """Create a JWT token for password reset."""
     expire = datetime.now(timezone.utc) + timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES  # Reutilizamos el tiempo de expiración
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES 
     )
     to_encode = {
         "exp": expire,

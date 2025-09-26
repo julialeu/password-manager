@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.api import deps
 from app.crud import crud_user
 from app.schemas.token import Token
-from app.schemas.password_reset import PasswordResetRequest, PasswordReset
+from app.schemas.password_reset import PasswordReset
 from app.core.security import create_access_token, create_password_reset_token, get_password_hash, verify_password_reset_token
 from app.core.config import settings
 
@@ -82,7 +82,8 @@ def reset_password(
             detail="The user with this email does not exist.",
         )
         
-    # Actualizamos la contraseña del usuario
+        
+    
     hashed_password = get_password_hash(reset_data.new_password)
     user.hashed_password = hashed_password
     db.add(user)

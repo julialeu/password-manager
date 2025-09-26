@@ -4,8 +4,7 @@ from sqlalchemy import or_
 
 from app.models.vault_item import VaultItem
 from app.schemas.vault_item import VaultItemCreate, VaultItemUpdate
-from app.core.security import encrypt_data, decrypt_data
-import json
+from app.core.security import encrypt_data
 
 def get_vault_item(db: Session, item_id: int, owner_id: int) -> VaultItem | None:
     """Retrieves an item from the vault by its ID, ensuring that it belongs to the owner_id."""

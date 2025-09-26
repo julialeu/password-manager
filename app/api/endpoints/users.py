@@ -28,16 +28,16 @@ def create_user(
             detail="The user with this email already exists in the system.",
         )
     
-    # 1. Creamos el usuario en la base de datos
+    # Creamos el usuario en la BD
     user = crud_user.create_user(db=db, user=user_in)
     
-    # 2. Generamos un token de acceso para el nuevo usuario
+    # Generamos un token de acceso
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     
-    # 3. Devolvemos el token
+    # Devolvemos el token
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/me", response_model=User)

@@ -12,11 +12,9 @@ function LoginPage() {
 
   // --- MENSAJE DE ÉXITO ---
   useEffect(() => {
-    // Leemos el mensaje de sessionStorage cuando el componente se carga
     const msg = sessionStorage.getItem('successMessage');
     if (msg) {
       setSuccessMessage(msg);
-      // Lo borramos para que no se vuelva a mostrar
       sessionStorage.removeItem('successMessage');
     }
   }, []);
@@ -25,7 +23,7 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-    setSuccessMessage(''); // Limpiamos el mensaje de éxito al intentar hacer login
+    setSuccessMessage(''); 
     try {
       const formData = new URLSearchParams();
       formData.append('username', email);

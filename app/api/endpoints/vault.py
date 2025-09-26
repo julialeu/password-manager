@@ -1,5 +1,3 @@
-# app/api/endpoints/vault.py
-
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -10,7 +8,6 @@ from app.schemas.vault_item import VaultItem, VaultItemCreate, VaultItemUpdate, 
 from app.crud import crud_vault_item
 from app.core.security import decrypt_data
 
-# ---> ESTA LÍNEA ES LA QUE PROBABLEMENTE FALTA <---
 router = APIRouter()
 
 @router.post("/", response_model=VaultItem, status_code=status.HTTP_201_CREATED)
@@ -21,7 +18,7 @@ def create_vault_item(
     item_in: VaultItemCreate
 ):
     """
-    Crea un nuevo item en la bóveda para el usuario actual.
+    Create a new item in the vault for the current user.
     """
     item = crud_vault_item.create_vault_item(db=db, item=item_in, owner_id=current_user.id)
     return item
@@ -36,9 +33,9 @@ def read_vault_items(
     url_filter: str | None = None
 ):
     """
-    Obtiene la lista de items de la bóveda para el usuario actual.
-    - `q`: Búsqueda de texto libre en username, url y notes.
-    - `url_filter`: Filtra items cuya URL contenga este texto.
+    Gets the list of items in the vault for the current user.
+    - `q`: Free text search in username, URL, and notes.
+    - `url_filter`: Filters items whose URL contains this text.
     """
     items = crud_vault_item.get_vault_items_by_owner(
         db,
@@ -57,7 +54,7 @@ def read_vault_item(
     current_user: UserModel = Depends(deps.get_current_user)
 ):
     """
-    Obtiene los detalles de un item específico de la bóveda, incluyendo la contraseña descifrada.
+    Obtains the details of a specific item in the vault, including the decrypted password.
     """
     item = crud_vault_item.get_vault_item(db, item_id=item_id, owner_id=current_user.id)
     if not item:
@@ -78,7 +75,7 @@ def update_vault_item(
     current_user: UserModel = Depends(deps.get_current_user)
 ):
     """
-    Actualiza un item de la bóveda.
+    Update an item in the vault.
     """
     
     db_item = crud_vault_item.get_vault_item(db, item_id=item_id, owner_id=current_user.id)
@@ -96,7 +93,7 @@ def delete_vault_item(
     current_user: UserModel = Depends(deps.get_current_user)
 ):
     """
-    Elimina un item de la bóveda.
+    Remove an item from the vault.
     """
     db_item = crud_vault_item.get_vault_item(db, item_id=item_id, owner_id=current_user.id)
     if not db_item:

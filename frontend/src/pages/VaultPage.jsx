@@ -36,11 +36,10 @@ function VaultPage() {
     }
   }, [searchQuery]);
 
-  // useEffect para buscar cuando el usuario deja de teclear
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchItems();
-    }, 300); // Espera 300ms antes de buscar
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, fetchItems]);
@@ -57,14 +56,14 @@ function VaultPage() {
 
   const handleModalSave = () => {
     setIsModalOpen(false);
-    fetchItems(); // Recargamos la lista después de guardar
+    fetchItems(); 
   };
 
   const handleDelete = async (itemId) => {
     if (window.confirm('Are you sure you want to delete this password?')) {
       try {
         await apiClient.delete(`/vault/${itemId}`);
-        fetchItems(); // Recargamos la lista
+        fetchItems(); 
       } catch (err) {
         console.error("Error deleting item:", err);
         alert('Error deleting password.');
