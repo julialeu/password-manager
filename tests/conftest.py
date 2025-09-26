@@ -1,5 +1,3 @@
-# tests/conftest.py
-
 import pytest
 import asyncio
 from typing import Generator, AsyncGenerator
@@ -66,18 +64,17 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 @pytest.fixture(scope="function")
 async def authenticated_client(client: AsyncClient) -> AsyncClient:
     """
-    Authenticated HTTP client. Function scope to ensure isolation.
+    Create a user and use the token returned in the registration to authenticate the client.
     """
     user_credentials = {"email": f"testauth-{id(client)}@example.com", "password": "testpassword"}
-    await client.post("/users/", json=user_credentials)
+    
+    # Crear usuario Y obtener token
+    response = await client.post("/users/", json=user_credentials)
+    token = response.json()["access_token"]
 
-    login_response = await client.post(
-        "/login/token",
-        data={"username": user_credentials["email"], "password": user_credentials["password"]},
-    )
-    token = login_response.json()["access_token"]
-
+    # Configurar la cabecera y devolver
     client.headers["Authorization"] = f"Bearer {token}"
     yield client
 
+    # Limpieza
     del client.headers["Authorization"]
