@@ -1,13 +1,18 @@
 from fastapi import FastAPI
 from app.api.endpoints import users, login, vault
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.config import settings
 
 app = FastAPI(title="Password Manager API", version="0.1.0")
 
-origins = [
-    "http://localhost:5173",
-    "http://localhost",
-]
+origins = []
+if settings.CORS_ORIGINS:
+    origins.extend([origin.strip() for origin in settings.CORS_ORIGINS.split(",")])
+else:
+    origins.extend([
+        "http://localhost",
+        "http://localhost:5173",
+    ])
 
 app.add_middleware(
     CORSMiddleware,
