@@ -68,11 +68,11 @@ async def authenticated_client(client: AsyncClient) -> AsyncClient:
     """
     user_credentials = {"email": f"testauth-{id(client)}@example.com", "password": "testpassword"}
     
-    # Crear usuario Y obtener token
+    # Crear usuario y obtener token
     response = await client.post("/users/", json=user_credentials)
     token = response.json()["access_token"]
 
-    # Configurar la cabecera y devolver
+    # Configurar el header y devolver
     client.headers["Authorization"] = f"Bearer {token}"
     yield client
 
